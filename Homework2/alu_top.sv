@@ -13,7 +13,8 @@ module alu_top // Module start declaration
 
   // Instantiation of module alu
   alu #(.N(N)) alu_instance(
-    // .opnd1(operand1), 
+    // .op
+    nd1(operand1), 
     // .opnd2(operand2), 
     // .operation(operation), 
     .*
