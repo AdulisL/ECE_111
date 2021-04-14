@@ -9,13 +9,13 @@ logic [1:0] operation;
 
 // Instantiate design under test
 alu_top #(.N(N)) design_instance(
- .clk(clock),
- .reset(reset),
- .operand1(operand1), 
- .operand2(operand2), 
- .operation(operation), 
- .result(result)
-
+//  .clock(clock),
+//  .reset(reset),
+//  .operand1(operand1), 
+//  .operand2(operand2), 
+//  .operation(operation), 
+//  .result(result),
+.*
 
 );
 
@@ -28,6 +28,7 @@ initial begin
   operation = 0;
 
   // Wait 20 ns for global reset to finish and start counter
+  
   #20ns;
   reset = 0;
 

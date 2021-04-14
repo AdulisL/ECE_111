@@ -17,7 +17,7 @@ module alu_top // Module start declaration
     // .opnd2(operand2), 
     // .operation(operation), 
     .*
-    // .out(alu_out)
+    .out(alu_out)
   );
 
   // Register alu output	
