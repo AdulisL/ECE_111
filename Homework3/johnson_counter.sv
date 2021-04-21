@@ -1,6 +1,6 @@
 module johnson_counter #(parameter WIDTH = 4)(
     input logic clk, clear, preset,
-    logic [WIDTH-1:0] load_cnt,
+    input[WIDTH-1:0] load_cnt,
     output logic[WIDTH-1:0] count
 );
     // reg [WIDTH-1:0] reg_count;
