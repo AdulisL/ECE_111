@@ -131,13 +131,15 @@ din = 4'b1011;
 #100ns;
 
 // terminate simulation
+
 $finish();
 end
 
 
 // Print input and output signals
 initial begin
- $monitor(" time=%0t,  select=%b  shift_value=%b  din=%b dout=%b", $time, select, shift_value, din, dout);
+ $monitor(" time=%0t,  select=%b  shift_value=%b  din=%b dout=%b  direction=%b"
+ , $time, select, shift_value, din, dout, direction);
 end
 
 endmodule

@@ -10,6 +10,15 @@ module barrel_shifter (
 
 // Students to add code for barrel shifter
 
+// barrel shifter
+always_comb 
+    casez ({select, direction, shift_value})
+      4'b?00:         dout = din;
+      4'b001, 4'b111: dout = {din[0], din[3:1]}; 
+      4'b?10:         dout = {din[1:0], din[3:2]}; 
+      4'b011, 4'b101: dout = {din[2:0], din[3]}; 
+      default: dout = din; 
+    endcase
 
 endmodule: barrel_shifter
 
