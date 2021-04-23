@@ -12,20 +12,18 @@ module johnson_counter #(parameter WIDTH = 4)(
     // end
 
     always @(posedge clk or negedge clear) begin //clk rising and falling edges
-        if(!clear) begin
-            // reg_count = 0;            // clear j_counter
+        if(!clear) begin    // clear j_counter
+            // reg_count = 0;            
             count <= 4'b0000;
         end
-        else if(!preset)begin
-            // reg_count = load_cnt;     // load load_count
+        else if(!preset)begin   // load load_count
+            // reg_count = load_cnt;     
             count <= load_cnt;
         end
-        else begin
-
-            // reg_count[2:0] = reg_count[3:1];  // right-shift
+        else begin  // right-shift
+            // reg_count[2:0] = reg_count[3:1];  
             count    <= count >> 1;
             count[3] <= ~count[0];
-
         end
     end
     // j_Counter value assigned to output port count  
