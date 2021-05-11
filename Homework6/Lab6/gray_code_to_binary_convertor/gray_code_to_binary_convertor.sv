@@ -14,12 +14,13 @@ module gray_code_to_binary_convertor #(parameter N = 4)(
 
   // gray_code to binary_value function 
   function automatic[N-1:0] gray_to_binary(logic[N-1:0] value);
-    begin
-      gray_to_binary[N-1] = value[N-1];
+      logic[N-1:0] temp;
+      temp[N-1] = value[N-1];
       // iterate through every element in the array
-      foreach (value[i])  
-        gray_to_binary[i-1] = value[i]^value[i-1];  
-    end   
+      for (int i = N-1; i > 0; i--)  
+        temp[i-1] = temp[i] ^ value[i-1]; 
+      return temp;   
+
   endfunction 
   
 endmodule: gray_code_to_binary_convertor
