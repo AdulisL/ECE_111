@@ -6,12 +6,10 @@ module carry_lookahead_adder#(parameter N=4)(
 );
 
 // declare carry and sum
-
 logic[N:0]l_carry;
 logic[N-1:0]l_sum;
 logic[N-1:0]p; // propagate
 logic[N-1:0]g; // generate
-
 assign l_carry[0]= CIN;
 
 always_comb begin
@@ -35,9 +33,7 @@ generate
 	end:fa_loop
 endgenerate
 
-
 assign result = {l_carry[N],l_sum};
-
-  
+ 
 endmodule: carry_lookahead_adder
 
