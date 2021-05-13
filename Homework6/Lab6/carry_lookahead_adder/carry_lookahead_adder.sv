@@ -8,8 +8,8 @@ module carry_lookahead_adder#(parameter N=4)(
 
  logic [n-1:-1] carry;
  logic [n-1:0] dummy;
- logic [n-1:0] x;
- logic [n-1:0] y;
+ logic [n-1:0] propogate;
+ logic [n-1:0] generate;
 
  assign carry[-1] = CIN;
  assign cout = carry[n-1];
@@ -17,9 +17,9 @@ module carry_lookahead_adder#(parameter N=4)(
  for(genvar i = 0; i < n; i++) 
   begin
     fulladder f0(result[i], dummy[i], A[i], B[i], carry[i-1]);
-    assign g[i] = a[i] & b[i];
-    assign p[i] = a[i] ^ b[i];
-    assign carry[i] = g[i] + (p[i] & carry[i-1]);
+    assign generate[i] = A[i] & B[i];
+    assign propogate[i] = A[i] ^ B[i];
+    assign carry[i] = generate[i] + (propogate[i] & carry[i-1]);
   end
   
 endmodule: carry_lookahead_adder
