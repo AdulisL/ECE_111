@@ -10,15 +10,25 @@ module parity_checker_moore(
  // state variables 
  logic present_state, next_state;
 
-
  // Sequential Logic for present state
  always_ff@(posedge clk) begin
-   // student to add logic here
+   if(!rstn)
+    present_state <= EVEN;
+  else 
+    present_state <= next_state;
  end
 
  // Combination Logic for Next State and Output
  always@(present_state,in) begin
-   // student to add logic here
+   case(present_state)
+    EVEN: parity = 0;
+    ODD: parity = 1;
+  endcase
+  next_state = EVEN;
+  case(present_state)
+    EVEN: if(in) next_state = ODD;
+    ODD: if(!in) next_state = ODD;
+  endcase
  end
 endmodule: parity_checker_moore
 

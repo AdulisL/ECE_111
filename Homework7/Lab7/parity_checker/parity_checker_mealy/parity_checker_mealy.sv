@@ -12,14 +12,36 @@ module parity_checker_mealy(
   
  // Sequential Logic for present state
  always_ff@(posedge clk) begin
-  
-   //student to add logic here
+  if(!rstn)
+    present_state <= EVEN;
+  else
+    present_state <= next_state;
    //Note : register out_t  (out <= out_t)
  end
 
  // Combination Logic for Next State and Output
  always_comb begin
-  
+  case(present_state)
+    EVEN: begin
+      if(in == 1) begin
+        next_state = ODD;
+        out = 0;
+      end
+      else begin
+        next_state = EVEN;
+        out = 0;
+      end
+    end
+    ODD: begin
+      if(in == 1) begin
+        next_state = ODD;
+        out = 0;
+      end
+      else begin 
+        next_state = EVEN;
+        out = 0;
+      end
+    end
    // student to add logic here
 
  end
