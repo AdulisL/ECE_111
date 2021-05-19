@@ -45,14 +45,12 @@ module vending_machine_moore(
       else next_state[CENTS_10] = 1'b1;
     end
     present_state[CENTS_15]: begin
-      open = 0;
+      open = 1;
       if(N==1) next_state[CENTS_0] = 1'b1;
       else if(D==1) next_state[CENTS_5] = 1'b1;
       else next_state[CENTS_15] = 1'b1;
     end
-    default: begin
-
-      //student to add logic here     
+    default: begin    
 
     end
     endcase
