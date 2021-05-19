@@ -34,6 +34,7 @@ enum logic[2:0]{
 } next_state;
 
 
+
 // Instantiate N-bit carry lookahead adder 
 // Pass add_operand1, add_operand2 and sum
 // Tie CIN to '0'
@@ -41,7 +42,9 @@ carry_lookahead_adder #(.N(N)) adder_inst(
 
 // Student to add code here
 // use add_operand1, add_operand2, sum logic (wires) to connect to carry lookahead adder inputs
-
+    .A(add_operand1),
+    .B(add_operand2),
+    .CIN(sum)
 );
 
 
@@ -61,63 +64,77 @@ always_ff@(posedge clock, posedge reset) begin
        // Wait for start signal.
        // if start is '1' then move to INITIALIZE otherwise say in IDLE state
        IDLE: begin
-        
          // Student to add code here
-
+            if(start) next_state <= INITIALIZE;
+            else next_state      <= IDLE;
        end
        // Load Multiplicand and Multiplier in a load register and a shift register
        // Initialize count to 0 and then set next_state to TEST
        INITIALIZE: begin
-         shift_reg <= {1'b0, {N{1'b0}}, multiplier};
+            shift_reg  <= {1'b0, {N{1'b0}}, multiplier};
          // Student to add remaining code in INITIALIZE state 	
+            load_reg   <= {1'b0, {N{1'b0}}, multiplicand};
+            count      <= 0;
+            next_state <= TEST;
 
-        end
+       end
 
         // Check shift register LSB and based on that perform ADD/Shift operation
         // if LSB='1' then perform ADD followed by Right Shift by 1
         // if LSB='0' then perform Right Shift by 1
-        TEST: begin
+      TEST: begin
            if(shift_reg[0] == 1'b1) begin
              // Pass Multiplicand to carry lookadahead adder one of the input  (add_operand1)
              // Pass to carry lookahead adder second input add_operand2, the previous stage adder output value to add with Multiplicand. (shift_reg[(2*N)-1:N])
 	     // Move to ADD state
              // Student to add code here
-           
+              add_operand1 <= load_reg;
+              add_operand2 <= shift_reg[(2*N)-1:N];
+              next_state   <= ADD;
            end
            else begin
              // Since no add operation to be performed pass 0 to carry lookadder input one of the input (add_operand1)
              // Pass to carry lookahead adder second input add_operand1, the previous stage adder output value (shift_reg[(2*N)-1:N])
              // move to shift and increment count state (SHIFT_AND_COUNT)
              // Student to add code here
+              add_operand1 <= 0;
+              add_operand2 <= shift_reg[(2*N)-1:N];
+              next_state   <= SHIFT_AND_COUNT;
+              count        <= count + 1;
 
             end
-	 end
+	    end
 
-	 ADD: begin
+	    ADD: begin
           shift_reg <= {sum, shift_reg[N-1:0]}; // Load shift register : Output sum from Adder which includes carry and retain previous lower bit of shift register
           // move to shift and increment count state (SHIFT_AND_COUNT)
           // Student to add code here
-	
-         end
+          next_state <= SHIFT_AND_COUNT;
+          count      <= count + 1;
 
-         SHIFT_AND_COUNT: begin
+	
+      end
+
+      SHIFT_AND_COUNT: begin
            // Right shift entire shift_reg by 1 position and store result in shift_reg
            // Increment count 
            // student to add code here           
-
+            shift_reg <= shift_reg >> 1;
+            count     <= count + 1;
+            
            if(count == N-1) begin // If 'N' times SHIFT operation performed then move to Done state else go back to Test state
-               // Student to add code here	   
-
+               // Student to add code here
+               next_state <= DONE;
            end
-	   else begin
-               // Student to add code here	   
-
+	         else begin
+               // Student to add code here	 
+               next_state <= TEST;
            end
-         end
+      end
 	
-         DONE: begin
+     DONE: begin
             next_state <= IDLE; // Wait for right shift value to be available. THis is the final product value.
-	 end
+	   end
     endcase
  end
 end
