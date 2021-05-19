@@ -21,7 +21,7 @@ module parity_checker_mealy(
 
  // Combination Logic for Next State and Output
  always_comb begin
-  case(present_state)
+  case(present_state) begin
     EVEN: begin
       if(in == 1) begin
         next_state = ODD;
@@ -32,18 +32,19 @@ module parity_checker_mealy(
         out = 0;
       end
     end
-    ODD: begin
+    ODD: begin 
       if(in == 1) begin
         next_state = ODD;
         out = 0;
       end
-      else begin 
+      else begin
         next_state = EVEN;
         out = 0;
       end
     end
-   // student to add logic here
-
+  end
  end
+
+
 endmodule: parity_checker_mealy
 

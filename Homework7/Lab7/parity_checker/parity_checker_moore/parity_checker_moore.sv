@@ -21,8 +21,8 @@ module parity_checker_moore(
  // Combination Logic for Next State and Output
  always@(present_state,in) begin
    case(present_state)
-    EVEN: parity = 0;
-    ODD: parity = 1;
+    EVEN: out = EVEN;
+    ODD: out = ODD;
   endcase
   next_state = EVEN;
   case(present_state)
