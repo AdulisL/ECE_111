@@ -6,8 +6,7 @@ module vending_machine_mealy(
 
   // state encoding and state variables
   parameter[3:0] CENTS_0=0, CENTS_5=1, CENTS_10=2, CENTS_15=3;
-  typedef enum logic[3:0] {} state; 
-  state present_state, next_state; 
+  logic[3:0] present_state, next_state; 
 
   // Note : output open is not registered in this example for students to compare moore and mealy machine waveform and see what is the different between mealy and moore
   // remember we learnt in class that mealy reacts immediately to change in input !!
