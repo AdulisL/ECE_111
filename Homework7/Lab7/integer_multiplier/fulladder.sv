@@ -1,6 +1,6 @@
 // FullAdder dataflow level code
 module fulladder(
-  input logic a, b, cin, 
+  input logic a, b, cin,
   output logic sum, cout
 );
   logic p, q;  

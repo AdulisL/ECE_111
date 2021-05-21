@@ -28,6 +28,7 @@ generate
 		.a(A[i]),
 		.b(B[i]),
 		.cin(l_carry[i]),
+		.cout(l_carry[i+1]),
 		.sum(l_sum[i])
 		  );
 	end:fa_loop
@@ -36,4 +37,6 @@ endgenerate
 assign result = {l_carry[N],l_sum};
  
 endmodule: carry_lookahead_adder
+
+
 
