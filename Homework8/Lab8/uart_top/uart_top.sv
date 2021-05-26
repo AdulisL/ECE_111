@@ -17,7 +17,7 @@ uart_tx #(.NUM_CLKS_PER_BIT(NUM_CLKS_PER_BIT)) instance1tx (.clk(tx_clk),
 
 // Instantiate uart receiver module
 uart_rx #(.NUM_CLKS_PER_BIT(NUM_CLKS_PER_BIT)) instance1rx(.clk(rx_clk), 
-.rstn(rx_rstn),.rx(serial_data_bit),.done(rx_done),.dout(r_dout));
+.rstn(rx_rstn),.rx(serial_data_bit),.done(rx_done),.dout(rx_dout));
 
 
 endmodule: uart_top
