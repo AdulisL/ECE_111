@@ -61,7 +61,7 @@ always_ff@(posedge clk) begin
 	    // for each databit to get midpoint count value is 16
 	    // counting starts from midpoint of previous bit and ends at midpoint
 	    // of current data bit
-             
+             // Student to fill rest of the code
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
                state <= RX_DATA_BIT1;
@@ -73,8 +73,12 @@ always_ff@(posedge clk) begin
 				 
 	end
 	
-		RX_DATA_BIT1: begin
-          
+	RX_DATA_BIT1: begin
+            // sample start bit value at mid-point
+	    // for each databit to get midpoint count value is 16
+	    // counting starts from midpoint of previous bit and ends at midpoint
+	    // of current data bit
+             // Student to fill rest of the code
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin // A cycle later
                done <= 0;
                state <= RX_DATA_BIT2;
@@ -84,9 +88,9 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
-		RX_DATA_BIT2: begin
+   RX_DATA_BIT2: begin
             
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
@@ -97,10 +101,10 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
         // Student to fill rest of the code for all remaining data bits and stop bit
-		RX_DATA_BIT3: begin
-            
+	RX_DATA_BIT3: begin
+           
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
                state <= RX_DATA_BIT4;
@@ -110,10 +114,10 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
-		RX_DATA_BIT4: begin
-           
+	RX_DATA_BIT4: begin
+            
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
                state <= RX_DATA_BIT5;
@@ -123,10 +127,10 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
-		RX_DATA_BIT5: begin
-            
+	RX_DATA_BIT5: begin
+           
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
                state <= RX_DATA_BIT6;
@@ -136,11 +140,11 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
 	
-		RX_DATA_BIT6: begin
-		
+	RX_DATA_BIT6: begin
+            
 			if( count == ((NUM_CLKS_PER_BIT-1))) begin
                done <= 0;
                state <= RX_DATA_BIT7;
@@ -150,10 +154,10 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
-		RX_DATA_BIT7: begin
-            
+	RX_DATA_BIT7: begin
+           
 			if(count ==((NUM_CLKS_PER_BIT-1))) begin // samples data_bit7
                done <= 0;
                state <= RX_STOP_BIT;
@@ -163,22 +167,25 @@ always_ff@(posedge clk) begin
                count <= count + 1;
            end	 
 				 
-		end
+	end
 	
-		RX_STOP_BIT: begin
-        if(rx ==1) begin    
+	RX_STOP_BIT: begin
+        if(rx ==1 && count ==((NUM_CLKS_PER_BIT-1))) begin    
             done <= 1;
             state <= RX_IDLE;
             count <= 0;	
 		   end else begin
-             
+             count <= count+1;
          end	 
 		    		
-	   end
+	  end
 	
   endcase
  end
 end
 endmodule: uart_rx
+
+
+
 
 
