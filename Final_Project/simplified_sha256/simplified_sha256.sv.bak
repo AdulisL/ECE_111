@@ -59,14 +59,6 @@ function logic [15:0] determine_num_blocks(input logic [31:0] size);
     determine_num_blocks = blocks;
 endfunction
 
-function logic [31:0] Wtnew; // found on sha pdf pg 21 - ana
-	logic [31:0] S0, S1; 
-		begin
-			S0 = rightrotate(w[1], 7) ^ rightrotate(w[1], 18) ^ (w[1] >> 3);
-			S1 = rightrotate(w[14], 17) ^ rightrotate(w[14], 19) ^ (w[14] >> 10);
-			Wtnew = w[0] + S0 + w[9] + S1;
-		end 
-endfunction
 
 // SHA256 hash round
 function logic [255:0] sha256_op(input logic [31:0] a, b, c, d, e, f, g, h, w,
@@ -175,41 +167,57 @@ begin
     // Go back to BLOCK stage after each block hash computation is completed and if
     // there are still number of message blocks available in memory otherwise
     // move to WRITE stage
-     COMPUTE: begin
-        if (j < 64) begin
-				{a, b, c, d, e, f, g, h} <= sha256_op(a,b,c,d,e,f,g,h,w[0],j);
-					for(int n=0;n<15;n++) begin // given pdf pg 9 - ana
-						w[n] <= w[n+1];
-					end
-						w[15] <= Wtnew;
-						j <= j + 1;
-				 
-						state <= COMPUTE;	
-			end 
-			
-		else begin
-			state <= BLOCK;
-			j <= 0;
-		
-		 h0 <= a + h0;
-		 h1 <= b + h1;
-		 h2 <= c + h2;
-		 h3 <= d + h3;
-		 h4 <= e + h4;
-		 h5 <= f + h5;
-		 h6 <= g + h6;
-		 h7 <= h + h7;
-		 
-		 a <= a + h0;
-		 b <= b + h1;
-		 c <= c + h2;
-		 d <= d + h3;
-		 e <= e + h4;
-		 f <= f + h5;
-		 g <= g + h6;
-		 h <= h + h7;
-		 
-       end
+    COMPUTE: begin
+	    // 64 processing rounds steps for 512-bit block 
+      if (i <= 64) begin
+        for(int x = 0; x < 15; x++) begin
+          w[x] <= w[x + 1];
+        end
+
+        if(i < 16) begin
+          // reading ahead - ana
+          if((offset << 2) <= size) begin
+            w[15] <= mem_read_data;
+          end
+
+          // padding message size since we're on last block - ana
+          else if ((j == num_blocks - 1) && i == 15) begin
+            w[15] <= num_blocks << 3; 
+          end
+
+          // 
+          else begin
+            w[15] <= 32'h00000000;
+          end
+        end
+
+        else begin 
+          if(i < 15) begin
+            offset <= offset + 1;
+          end
+
+          if(i != 0) begin
+            {a, b, c, d, e, f, g, h} <= sha256_op(a, b, c, d, e, f, g, h, w[15], tstep);
+          end
+
+          i <= i + 1;
+          state <= COMPUTE;
+        end
+      end
+
+      else begin
+        h0 <= a + h0;
+        h1 <= b + h1;
+        h2 <= c + h2;
+        h3 <= d + h3;
+        h4 <= e + h4;
+        h5 <= f + h5;
+        h6 <= g + h6;
+        h7 <= h + h7;
+
+        j <= j + 1;
+        state <= BLOCK;
+      end
     end
 
     // h0 to h7 each are 32 bit hashes, which makes up total 256 bit value
