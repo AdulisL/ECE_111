@@ -27,6 +27,7 @@ logic [15:0] cur_addr;
 logic [31:0] cur_write_data;
 logic [512:0] memory_block;
 logic [ 7:0] tstep;
+logic [31:0] holder;
 
 // SHA256 K constants
 parameter int k[0:63] = '{
@@ -131,15 +132,49 @@ begin
         h6 <= 32'h1f83d9ab;
         h7 <= 32'h5be0cd19;
 
+        a <= 32'h6a09e667;
+        b <= 32'hbb67ae85;
+        c <= 32'h3c6ef372;
+        d <= 32'ha54ff53a;
+        e <= 32'h510e527f;
+        f <= 32'h9b05688c;
+        g <= 32'h1f83d9ab;
+        h <= 32'h5be0cd19;
+
         //initializing and setting to defaults - ana
-        j <= 0;
-        offset <= 0;
+        j <= 8'b0;
+        i <= 8'b0;
+        offset <= 32'b0;
         cur_we <= 0;
-        cur_addr <= mem_addr;
+        cur_addr <= message_addr;
         cur_write_data <= 0;
-        state <= BLOCK;
+        state <= READ_FIRST;
 
        end
+    end
+
+    READ_FIRST: begin
+      state <= READ;
+    end
+
+    READ: begin
+      if(offset < NUM_OF_WORDS) begin
+        w[offset] <= mem_read_data;
+        offset <= offset + 1;
+        state <= READ_FIRST;
+      end
+
+      else begin
+        w[31] <= 32'd640;
+        w[20] <= 32'h80000000;
+
+        for(int x = 21; x < 31; x++) begin
+          w[x] <= 32'h0;
+        end
+
+        offset <= 0;
+        state <= BLOCK;
+      end
     end
 
     // SHA-256 FSM 
@@ -148,27 +183,34 @@ begin
     BLOCK: begin
 	  // Fetch message in 512-bit block size
 	  // For each of 512-bit block initiate hash value computation
-      if(j < num_blocks) begin
-        // initializing at the start of processing - ana
-        a <= h0; 
-        b <= h1;
-        c <= h2;
-        d <= h3;
-        e <= h4;
-        f <= h5;
-        g <= h6;
-        h <= h7;
-        i <= 0;
-
-        offset <= offset + 1;
-        state <= COMPUTE;
+      if(i < num_blocks) begin
+        // initializing at the start of processing wait lol nvm trying something- ana 
+        for(int x = 0; x < 16; x++) begin
+          w[x] <= w[x + (i*16)];
+          i <= i + 1;
+          state <= COMPUTE;
+        end
       end
       
       else begin 
-        offset <= 0;
-        i <= 0;
-        state <= WRITE;
+        state <= WRITE_FIRST;
       end
+    end
+
+    WRITE_FIRST: begin
+      cur_we <= 1;
+      cur_addr <= output_addr;
+      cur_write_data <= h0;
+      state <= WRITE;
+
+      holder[0] <= h0; 
+      holder[1] <= h1;
+      holder[2] <= h2;
+      holder[3] <= h3;
+      holder[4] <= h4;
+      holder[5] <= h5;
+      holder[6] <= h6;
+      holder[7] <= h7;
     end
 
     // For each block compute hash function
@@ -216,22 +258,9 @@ begin
     // write back these h0 to h7 to memory starting from output_addr
     WRITE: begin
       if(i < 8) begin
-        cur_we <= 1;
-        cur_addr <= output_addr;
-
-        case (i)
-          0: cur_write_data <= h0;
-				  1: cur_write_data <= h1;
-				  2: cur_write_data <= h2;
-				  3: cur_write_data <= h3;
-				  4: cur_write_data <= h4;
-				  5: cur_write_data <= h5;
-				  6: cur_write_data <= h6;
-				  7: cur_write_data <= h7;
-        endcase
-
-        offset <= i;
-        i <= i + 1;
+        offset <= offset + 1;
+        cur_write_data <= holder[offset + 1]
+        state <= WRITE;
       end
 
       else begin
