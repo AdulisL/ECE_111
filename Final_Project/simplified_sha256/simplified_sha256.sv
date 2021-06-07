@@ -176,40 +176,39 @@ begin
     // there are still number of message blocks available in memory otherwise
     // move to WRITE stage
      COMPUTE: begin
-        if (j < 64) begin
-				{a, b, c, d, e, f, g, h} <= sha256_op(a,b,c,d,e,f,g,h,w[0],j);
-					for(int n=0;n<15;n++) begin // given pdf pg 9 - ana
-						w[n] <= w[n+1];
-					end
-						w[15] <= Wtnew;
-						j <= j + 1;
-				 
-						state <= COMPUTE;	
-			end 
-			
-		else begin
-			state <= BLOCK;
-			j <= 0;
-		
-		 h0 <= a + h0;
-		 h1 <= b + h1;
-		 h2 <= c + h2;
-		 h3 <= d + h3;
-		 h4 <= e + h4;
-		 h5 <= f + h5;
-		 h6 <= g + h6;
-		 h7 <= h + h7;
-		 
-		 a <= a + h0;
-		 b <= b + h1;
-		 c <= c + h2;
-		 d <= d + h3;
-		 e <= e + h4;
-		 f <= f + h5;
-		 g <= g + h6;
-		 h <= h + h7;
-		 
-       end
+      if (j < 64) begin
+      {a, b, c, d, e, f, g, h} <= sha256_op(a,b,c,d,e,f,g,h,w[0],j);
+        for(int n = 0; n < 15; n++) begin // given pdf pg 9 - ana
+          w[n] <= w[n+1];
+        end
+
+        w[15] <= Wtnew;
+        j <= j + 1;
+        state <= COMPUTE;	
+      end
+
+      else begin
+        state <= BLOCK;
+        j <= 0;
+      
+        h0 <= a + h0;
+        h1 <= b + h1;
+        h2 <= c + h2;
+        h3 <= d + h3;
+        h4 <= e + h4;
+        h5 <= f + h5;
+        h6 <= g + h6;
+        h7 <= h + h7;
+        
+        a <= a + h0;
+        b <= b + h1;
+        c <= c + h2;
+        d <= d + h3;
+        e <= e + h4;
+        f <= f + h5;
+        g <= g + h6;
+        h <= h + h7;
+      end
     end
 
     // h0 to h7 each are 32 bit hashes, which makes up total 256 bit value
