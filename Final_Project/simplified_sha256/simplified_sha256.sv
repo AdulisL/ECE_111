@@ -7,7 +7,7 @@ module simplified_sha256 #(parameter integer NUM_OF_WORDS = 20)(
  input logic [31:0] mem_read_data);
 
 // FSM state variables 
-enum logic [2:0] {IDLE, READ, BLOCK, COMPUTE, WRITE} state;
+enum logic [2:0] {IDLE, READ, BLOCK, COMPUTE, WRITE, READ_FIRST, WRITE_FIRST} state;
 
 // NOTE : Below mentioned frame work is for reference purpose.
 // Local variables might not be complete and you might have to add more variables
@@ -48,16 +48,13 @@ assign tstep = (i - 1);
 // Function to determine number of blocks in memory to fetch
 function logic [15:0] determine_num_blocks(input logic [31:0] size);
   // Student to add function implementation
-  logic [31:0] blocks, quotient, modder;
-    quotient = (size*32)/512;
-    modder = (size*32)%512;
-    if(modder) begin
-      blocks = quotient + 1;
-    end
-    else begin
-      blocks = quotient;
-    end
-    determine_num_blocks = blocks;
+  //logic [31:0] blocks, quotient, modder;
+	if(size%64 < 56) begin
+			determine_num_blocks = size/64 + 1;
+	end
+	else begin
+		determine_num_blocks = size/64 + 2;
+	end
 endfunction
 
 function logic [31:0] wt_new; // found on sha pdf pg 21 - ana
@@ -259,7 +256,7 @@ begin
     WRITE: begin
       if(i < 8) begin
         offset <= offset + 1;
-        cur_write_data <= holder[offset + 1]
+        cur_write_data <= holder[offset + 1];
         state <= WRITE;
       end
 
