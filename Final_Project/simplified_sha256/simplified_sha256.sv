@@ -60,12 +60,12 @@ function logic [15:0] determine_num_blocks(input logic [31:0] size);
     determine_num_blocks = blocks;
 endfunction
 
-function logic [31:0] Wtnew; // found on sha pdf pg 21 - ana
+function logic [31:0] wt_new; // found on sha pdf pg 21 - ana
 	logic [31:0] S0, S1; 
 		begin
 			S0 = rightrotate(w[1], 7) ^ rightrotate(w[1], 18) ^ (w[1] >> 3);
 			S1 = rightrotate(w[14], 17) ^ rightrotate(w[14], 19) ^ (w[14] >> 10);
-			Wtnew = w[0] + S0 + w[9] + S1;
+			wt_new = w[0] + S0 + w[9] + S1;
 		end 
 endfunction
 
@@ -224,7 +224,7 @@ begin
           w[n] <= w[n+1];
         end
 
-        w[15] <= Wtnew;
+        w[15] <= wt_new;
         j <= j + 1;
         state <= COMPUTE;	
       end
