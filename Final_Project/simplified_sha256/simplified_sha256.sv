@@ -47,6 +47,7 @@ assign tstep = (i - 1);
 // Note : Function defined are for reference purpose. Feel free to add more functions or modify below.
 // Function to determine number of blocks in memory to fetch
 function logic [15:0] determine_num_blocks(input logic [31:0] size);
+  
   // Student to add function implementation
   //logic [31:0] blocks, quotient, modder;
 	if(size%64 < 56) begin
