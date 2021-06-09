@@ -73,6 +73,7 @@ initial
 begin
 // PRELIMINARIES
   $readmemh("message_seed.txt",message_seed);
+//   message_seed = 32'h01234567
     // RESET HASH CO-PROCESSOR
 
     @(posedge clk) reset_n = 0;

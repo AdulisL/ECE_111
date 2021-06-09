@@ -46,12 +46,22 @@ assign tstep = (i - 1);							  // already taken care of for you
 assign num_blocks = determine_num_blocks(size);   // assume maximum of 256 blocks = 16K bytes
 
 // Function to determine number of blocks in memory to fetch
+// 7x8 = 56  to determine num_blocks - Meron
 function logic [15:0] determine_num_blocks(input[31:0] size);
-  if (size ... )				            // hint: block size = 64
+  if (size % 64 < 56)				            // hint: block size = 64
     determine_num_blocks = size/64 + 1;
   else
     determine_num_blocks = size/64 + 2;   
   $display("size = %d, num_blocks = %d",size,determine_num_blocks);
+endfunction
+
+function logic [31:0] wt_new; // found on sha pdf pg 21 - ana
+	logic [31:0] S0, S1; 
+		begin
+			S0 = rightrotate(w[1], 7) ^ rightrotate(w[1], 18) ^ (w[1] >> 3);
+			S1 = rightrotate(w[14], 17) ^ rightrotate(w[14], 19) ^ (w[14] >> 10);
+			wt_new = w[0] + S0 + w[9] + S1;
+		end 
 endfunction
 
 // SHA256 hash round
@@ -59,11 +69,14 @@ function logic [255:0] sha256_op(input [31:0] a, b, c, d, e, f, g, h, w,
                                  input [ 7:0] t);
   logic [31:0] S1, S0, ch, maj, t1, t2; // internal signals
     S1 = rightrotate(e, 6) ^ rightrotate(e, 11) ^ rightrotate(e, 25);
-    ch =  // Boolean function of e, f, and g
-    t1 =  // function of h, w, ch, k[t], and S1
-    S0 =  // rotate and XOR function of a
-    maj = // carry bit of a, b, and c -- majority gate
-    t2 =  // function of maj and S0
+    // Student to add remaning code below
+    // I found this on the powerpoint - ana
+    ch =  (e & f) ^ ((~e) & g); // Boolean function of e, f, and g
+    t1 =  S1 + h + ch + k[t] + w; // function of h, w, ch, k[t], and S1
+    // rotate and XOR function of a
+    S0 =  rightrotate(a, 2) ^ rightrotate(a, 13) ^ rightrotate(a, 22);  
+    maj = (a & b) ^ (a & c) ^ (b & c);  // carry bit of a, b, and c majority gate
+    t2 =  S0 + maj; // function of maj and S0
     sha256_op = {t1 + t2, a, b, c, d + t1, e, f, g};
 endfunction
 
@@ -79,10 +92,10 @@ assign mem_addr = cur_addr + offset;    // offset increments during mem read / w
 // x << (32-r) will result in : 8888 0000 0000 0000 0000 0000 0000 0000
 // final right rotate value = 8888 1111 ffff 2222 3333 4444 6666 7777
 // (0000 1111 ffff 2222 3333 4444 6666 7777) | (8888 0000 0000 0000 0000 0000 0000 0000)
-// Right rotation function
+// Right rotation function - Ana
 function logic [31:0] rightrotate(input logic [31:0] x,
                                   input logic [ 7:0] r);
-   // right rotate x by r positions
+   rightrotate = (x >> r) | (x << (32-r)); // right rotate x by r positions
 endfunction
 
 // Called from COMPUTE stage for word expansion logic
@@ -121,23 +134,24 @@ always_ff @(posedge clk, negedge reset_n) begin
         h6 <= 32'h1f83d9ab;
         h7 <= 32'h5be0cd19;
 
+// The initializations got it from office hours - Meron
 // Initialize counter of number of block iterations 
-        j              <= ; 
+        j            <= 0; 
 
 // Initialize pointer to access memory location
-	    offset         <= ;
+	    offset         <= 0;
 
 // by default, set memory to read mode 
-	    mem_we         <= ;
+	    mem_we         <= 0;
 
 // get staring address of message 
-	    cur_addr       <= ;
+	    cur_addr       <= message_addr;
 
 // clear write data to memory
-	    mem_write_data <= ;
-
+	    mem_write_data <= 0;
+      // done           <= 0;
 // on to next state
-	    state          <= ;
+	    state          <= BLOCK;
       end
     end	  :idle_loop
 
@@ -150,31 +164,31 @@ always_ff @(posedge clk, negedge reset_n) begin
     BLOCK: begin :block_loop
 	// Fetch message in 512-bit block size
 	// For each of 512-bit block initiate hash value computation
-      if(j < ) begin
+    if(j < num_blocks) begin    // Following the instructions above - Meron
 // at start of processing each message block M[j], copy h0:7 to a:h
-       	a <= ; 
-		
-    	
-    	
-    	 ...
-
-		
-		h <= ;
+       	a <= h0; 
+        b <= h1;
+        c <= h2;
+        d <= h3;
+        e <= h4;
+        f <= h5;
+        g <= h6;
+        h <= h7;
 		
 // reset 64 iteration processing counter 
-		i <= ;
+		i <= 0; // initalizing for COMPUTE - Meron
 
 // increment memory address to fetch next block
-		offset <= ;
+		offset <= offset + 1; // got it from Ana - Meron
 
-// move to SHA256 hash COMPUTE stage
-		state  <= ; 
+// move to SHA256 hash COMPUTE stage - Meron
+		state  <= COMPUTE; 
 	  end
 // After all blocks from memory are fetched and hash value is computed,
 //  move to memory WRITE stage to write final 256-bit computed hash value
 	  else begin
-	    i <= ;
-		state <= ;
+	    i     <= 0;     //  Initialize counter for 512-bit block - Meron
+		  state <= WRITE;
 	  end
     end	:block_loop
 
@@ -201,18 +215,18 @@ always_ff @(posedge clk, negedge reset_n) begin
 	    // Extend the first 16 words into the remaining 48 words w[15..63] of the message schedule array
 	        else begin
 	    // w[i] := w[i-15] + s0 + w[i-6] + s1
-              w[15] <= // function of w[0], right-rotated/shifted w[1], w[9], right-rotated/shifted w[14] 
-
+              // This is Ana's function - Meron
+              w[15] <= wt_new; // function of w[0], right-rotated/shifted w[1], w[9], right-rotated/shifted w[14] 
             end
 
-            if (i < 15) offset <= ...;
+            if (i < 15) offset <= offset + 1;    // fetch next block - Meron
 
             if (i != 0) begin // process tstep = (i - 1)th round
-                {a, ..., h} <= sha256_op(a, ..., h, w[15], tstep);
+                {a, b, c, d, e, f, g, h} <= sha256_op(a, b, c, d, e, f, g, h, w[15], tstep);
             end
 
-	    // next processing iteration
-            i <= ;
+	    // next processing iteration - Meron
+            i <= i + 1;
 				
 	    // Stay in COMPUTE stage until 64 iterations of processing is completed for the BLOCK
 	    state <= COMPUTE;
@@ -221,19 +235,20 @@ always_ff @(posedge clk, negedge reset_n) begin
             // Add the compressed chunk computed from sha256_a function to the current hash value
             // and compute final hash value for current block
             h0 <= h0 + a;
-			 // etc.
+			 // etc. // Following the instruction above - Meron
+            h1 <= h1 + b;
+            h2 <= h2 + c;
+            h3 <= h3 + d;
+            h4 <= h4 + e;
+            h5 <= h5 + f;
+            h6 <= h6 + g;
+            h7 <= h7 + h;
 
+	    // increment block index - Meron
+            j <= j + 1;
 
-
-
-
-
-
-	    // increment block index
-            j <= ;
-
-        // go to next BLOCK fetch stage
-            state <= ;
+        // go to next BLOCK fetch stage - Meron
+            state <= BLOCK;
         end
     end
 
@@ -245,33 +260,36 @@ always_ff @(posedge clk, negedge reset_n) begin
     // write one word at a time into data memory 
 	// offset will move memory address from one location to the next
 	// so that our 8 hashes are written to consecutive output addresses
-                mem_we <= 1;
-                cur_addr <= output_addr;
-                case (i)
-                  0: mem_write_data <= h0;
-   				  // etc.
-
-
-
-
-
-
-
-
-
-  // update memory address
-       offset <= ; 
-     
-  // increment hash pointer
-       i <= ; 
-	 end else
-  //  proceed to next state
-	    state <= ; 
-    end
+          
+        mem_we <= 1;
+        cur_addr <= output_addr;
+        if (i < 8) begin
+          case (i) // Following the instruction above - Meron
+              0: mem_write_data <= h0;
+                          // etc.
+              1: mem_write_data <= h1;
+              2: mem_write_data <= h2;
+              3: mem_write_data <= h3;
+              4: mem_write_data <= h4;
+              5: mem_write_data <= h5;
+              6: mem_write_data <= h6;
+              7: mem_write_data <= h7;
+          endcase
+        // update memory address - Meron
+            offset <= i; 
+            // mem_write_data <= output_addr + offset;
+          
+        // increment hash pointer - Meron
+            i <= i + 1;
+            state <= WRITE;
+          end else
+        //  proceed to next state - Meron
+                state <= IDLE; 
+          end
    endcase
-  end
+end
 
 // Generate when SHA256 hash computation has finished and moved to IDLE state
-assign done = ;
+assign done = (state == IDLE);
 
 endmodule

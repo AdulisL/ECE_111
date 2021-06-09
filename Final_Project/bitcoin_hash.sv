@@ -43,19 +43,19 @@ parameter int k[64] = '{
     32'h748f82ee,32'h78a5636f,32'h84c87814,32'h8cc70208,32'h90befffa,32'ha4506ceb,32'hbef9a3f7,32'hc67178f2
 };
 
-assign mem_clk = ;			  // as we did in sha256
+assign mem_clk = clk;			  // as we did in sha256 - Meron
 
-// instantiate 16 SHA256 modules
+// instantiate 16 SHA256 modules - Meron
 genvar q;
 generate
   for (q=0; q<num_nonces; q++) begin : generate_pblocks
     pblock block(
-	  .clk       (),    // make the connections -- easy: match the port names
-	  .state     (), 
-	  .t         (), 
-	  .n         (),
-	  .mem_read_data(),
-	  .k1        (),
+	  .clk       (clk),    // make the connections -- easy: match the port names
+	  .state     (state), 
+	  .t         (t), 
+	  .n         (q),      // picked it from office hours - Meron 
+	  .mem_read_data(mem_read_data),
+	  .k1        (k1),
 	  .hout      (hout[q]));
   end
 endgenerate
@@ -63,13 +63,13 @@ endgenerate
 always_ff @(posedge clk, negedge reset_n) 
   if(!reset_n) begin
     state <= IDLE;
-	done  <= 0;
+	  done  <= 0;
   end
-  else
-    case(state)
+  else 
+    case(state)   // - Meron
       IDLE:	if(start) begin
-        mem_we   <= 	 // as we did in sha256 exercise (when do we write to memory?)
-        mem_addr <= 	 // as in sha256 -- set for reading message
+        mem_we   <= 	1'b0; // as we did in sha256 exercise (when do we write to memory?)
+        mem_addr <= 	cur_addr + offset; // as in sha256 -- set for reading message
         t        <= 	 // initialize (starting out) ... 
         state    <=      // next state in list
       end
