@@ -40,20 +40,20 @@ always_ff@(posedge clk) begin
   case(state)
 	 TX_IDLE: begin
 		count <= 0;
-                // Output tx = 1 indicates stop state
+        // Output tx = 1 indicates stop state
 		tx <= 1;
-                done <= 0;
-	        bit_index <= 0;
-                // If start is set to '1' then start sampling UART Tx packet START BIT from next cycle
+        done <= 0;
+	    bit_index <= 0;
+        // If start is set to '1' then start sampling UART Tx packet START BIT from next cycle
 		if(rstn==1 && start == 1) state <= TX_START_BIT;
 		else state<= TX_IDLE;
 	 end
 	 TX_START_BIT: begin
-                // Output rx = 0 indicates as start bit
-	        tx<=0;  
-                done <= 0;
+        // Output rx = 0 indicates as start bit
+	    tx <=0 ;  
+        done <= 0;
 		bit_index <= 0;
-                // Transmit START BIT for NUM_CLKS_PER_BIT period
+        // Transmit START BIT for NUM_CLKS_PER_BIT period
 		if(count == (NUM_CLKS_PER_BIT-1)) begin
 		  state <= TX_DATA_BIT;
 		  count <= 0;
@@ -100,14 +100,14 @@ always_ff@(posedge clk) begin
 		end
           end
           TX_CLEANUP: begin
-                // Stay in this state for 1 clock cycle and keep done asserted for 1 cycle
-	        done <= 1;
-		state <= TX_IDLE;		            
+        // Stay in this state for 1 clock cycle and keep done asserted for 1 cycle
+	      done <= 1;
+		  state <= TX_IDLE;		            
           end
           default: begin
 	        done <= 0;
-                state <= TX_IDLE;
-                tx <= 0;  		  
+            state <= TX_IDLE;
+            tx <= 0;  		  
           end
   endcase
  end

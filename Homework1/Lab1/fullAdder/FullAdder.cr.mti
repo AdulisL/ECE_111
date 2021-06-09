@@ -1,0 +1,69 @@
+{{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_behavioral.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_behavioral.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:03:57 on Apr 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_behavioral.sv 
+-- Compiling module fulladder_behave
+
+Top level modules:
+	fulladder_behave
+End time: 22:03:57 on Apr 02,2021, Elapsed time: 0:00:00
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_gate.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_gate.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:03:57 on Apr 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_gate.sv 
+-- Compiling module fulladder_gate
+
+Top level modules:
+	fulladder_gate
+End time: 22:03:57 on Apr 02,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_behavioral.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_behavioral.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module fulladder_behave
+
+Top level modules:
+	fulladder_behave
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_gate.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_gate.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module fulladder_gate
+
+Top level modules:
+	fulladder_gate
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_dataflow.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_dataflow.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:03:57 on Apr 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_dataflow.sv 
+-- Compiling module fulladder_data
+
+Top level modules:
+	fulladder_data
+End time: 22:03:57 on Apr 02,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_dataflow.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_dataflow.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module fulladder_data
+
+Top level modules:
+	fulladder_data
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_testbench.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module fulladder_testbench
+
+Top level modules:
+	fulladder_testbench
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_testbench.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 22:03:57 on Apr 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/fulladder_testbench.sv 
+-- Compiling module fulladder_testbench
+
+Top level modules:
+	fulladder_testbench
+End time: 22:03:57 on Apr 02,2021, Elapsed time: 0:00:00
+
+} {} {}}

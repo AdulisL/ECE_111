@@ -1,15 +1,15 @@
-{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/fulladder.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/fulladder.sv}
+{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/integer_multiplier_testbench.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/integer_multiplier_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module integer_multiplier_testbench
+
+Top level modules:
+	integer_multiplier_testbench
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/fulladder.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/fulladder.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
 -- Compiling module fulladder
 
 Top level modules:
 	fulladder
-
-} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/carry_lookahead_adder.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework7/Lab7/integer_multiplier/carry_lookahead_adder.sv}
-Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module carry_lookahead_adder
-
-Top level modules:
-	carry_lookahead_adder
 
 } {} {}}

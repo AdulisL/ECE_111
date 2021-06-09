@@ -66,7 +66,7 @@ always_ff@(posedge clk) begin
                done <= 0;
                state <= RX_DATA_BIT1;
                dout[0] <= rx;
-					count <= 0;
+			   count <= 0;
            end else begin
                count <= count + 1;
            end 

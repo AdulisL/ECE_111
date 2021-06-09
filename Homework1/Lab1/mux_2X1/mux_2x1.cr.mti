@@ -1,0 +1,69 @@
+{{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_testbench.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 20:45:01 on Apr 05,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_testbench.sv 
+-- Compiling module mux_2x1_testbench
+
+Top level modules:
+	mux_2x1_testbench
+End time: 20:45:01 on Apr 05,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_testbench.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux_2x1_testbench
+
+Top level modules:
+	mux_2x1_testbench
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_gate.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_gate.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 20:45:01 on Apr 05,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_gate.sv 
+-- Compiling module mux_2x1
+
+Top level modules:
+	mux_2x1
+End time: 20:45:01 on Apr 05,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_gate.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_gate.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux_2x1
+
+Top level modules:
+	mux_2x1
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_dataflow.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_dataflow.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 20:45:01 on Apr 05,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_dataflow.sv 
+-- Compiling module mux_2x1
+
+Top level modules:
+	mux_2x1
+End time: 20:45:01 on Apr 05,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_dataflow.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_dataflow.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux_2x1
+
+Top level modules:
+	mux_2x1
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_behave.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_behave.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 20:45:01 on Apr 05,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_behave.sv 
+-- Compiling module mux_2x1_behave
+
+Top level modules:
+	mux_2x1_behave
+End time: 20:45:01 on Apr 05,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_behave.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/HomeWork/Homework1/Lab1/mux_2x1_behave.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module mux_2x1_behave
+
+Top level modules:
+	mux_2x1_behave
+
+} {} {}}

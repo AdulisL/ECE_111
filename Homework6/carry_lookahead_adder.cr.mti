@@ -1,0 +1,50 @@
+{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder_testbench.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module carry_lookahead_adder_testbench
+
+Top level modules:
+	carry_lookahead_adder_testbench
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder_testbench.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder_testbench.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 21:58:03 on May 12,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder_testbench.sv 
+-- Compiling module carry_lookahead_adder_testbench
+
+Top level modules:
+	carry_lookahead_adder_testbench
+End time: 21:58:03 on May 12,2021, Elapsed time: 0:00:00
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/fulladder.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/fulladder.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module fulladder
+
+Top level modules:
+	fulladder
+
+} {} {}} {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv} {1 {vlog -work work -sv -stats=none {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module carry_lookahead_adder
+
+Top level modules:
+	carry_lookahead_adder
+
+} {} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv}} {0 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 21:58:03 on May 12,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv 
+-- Compiling module carry_lookahead_adder
+** Error: (vlog-13069) C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/carry_lookahead_adder.sv(34): near ")": syntax error, unexpected ')', expecting .* or '.'.
+End time: 21:58:03 on May 12,2021, Elapsed time: 0:00:00
+
+} {6.0 7.0} {}} {{C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/fulladder.sv}} {1 {vlog -work work -sv {C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/fulladder.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+Start time: 21:58:03 on May 12,2021
+vlog -reportprogress 300 -work work -sv C:/Users/Meron Er/Documents/C.E/Spring 2021/ECE 111/ECE_111/Homework6/Lab6/carry_lookahead_adder/fulladder.sv 
+-- Compiling module fulladder
+
+Top level modules:
+	fulladder
+End time: 21:58:03 on May 12,2021, Elapsed time: 0:00:00
+
+} {} {}}

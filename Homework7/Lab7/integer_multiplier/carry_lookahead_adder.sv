@@ -7,6 +7,7 @@ module carry_lookahead_adder#(parameter N=4)(
 
 // declare carry and sum
 logic[N:0]l_carry;
+logic[N:0]cout;
 logic[N-1:0]l_sum;
 logic[N-1:0]p; // propagate
 logic[N-1:0]g; // generate
@@ -17,6 +18,7 @@ always_comb begin
 		g[j] = (A[j] & B[j]);
 		p[j] =((A[j]) ^ (B[j]));
 		l_carry[j+1]= ((g[j])|(p[j]&(l_carry[j])));
+		cout[j] = ((g[j])|(p[j]&(l_carry[j])));
 	end
 end
  
@@ -28,7 +30,7 @@ generate
 		.a(A[i]),
 		.b(B[i]),
 		.cin(l_carry[i]),
-		.cout(l_carry[i+1]),
+		.cout(cout[i]),
 		.sum(l_sum[i])
 		  );
 	end:fa_loop
