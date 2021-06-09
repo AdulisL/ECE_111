@@ -7,7 +7,7 @@ module simplified_sha256 #(parameter integer NUM_OF_WORDS = 20)(
  input logic [31:0] mem_read_data);
 
 // FSM state variables 
-enum logic [2:0] {IDLE, READ, BLOCK, COMPUTE, WRITE} state;
+enum logic [2:0] {IDLE, READ, BLOCK, COMPUTE, WRITE, READ_FIRST, WRITE_FIRST} state;
 
 // NOTE : Below mentioned frame work is for reference purpose.
 // Local variables might not be complete and you might have to add more variables
@@ -27,6 +27,7 @@ logic [15:0] cur_addr;
 logic [31:0] cur_write_data;
 logic [512:0] memory_block;
 logic [ 7:0] tstep;
+logic [31:0] holder;
 
 // SHA256 K constants
 parameter int k[0:63] = '{
@@ -40,18 +41,30 @@ parameter int k[0:63] = '{
    32'h748f82ee,32'h78a5636f,32'h84c87814,32'h8cc70208,32'h90befffa,32'ha4506ceb,32'hbef9a3f7,32'hc67178f2
 };
 
-
 assign num_blocks = determine_num_blocks(NUM_OF_WORDS); 
 assign tstep = (i - 1);
 
 // Note : Function defined are for reference purpose. Feel free to add more functions or modify below.
 // Function to determine number of blocks in memory to fetch
 function logic [15:0] determine_num_blocks(input logic [31:0] size);
-
   // Student to add function implementation
-
+  //logic [31:0] blocks, quotient, modder;
+	if(size%64 < 56) begin
+			determine_num_blocks = size/64 + 1;
+	end
+	else begin
+		determine_num_blocks = size/64 + 2;
+	end
 endfunction
 
+function logic [31:0] wt_new; // found on sha pdf pg 21 - ana
+	logic [31:0] S0, S1; 
+		begin
+			S0 = rightrotate(w[1], 7) ^ rightrotate(w[1], 18) ^ (w[1] >> 3);
+			S1 = rightrotate(w[14], 17) ^ rightrotate(w[14], 19) ^ (w[14] >> 10);
+			wt_new = w[0] + S0 + w[9] + S1;
+		end 
+endfunction
 
 // SHA256 hash round
 function logic [255:0] sha256_op(input logic [31:0] a, b, c, d, e, f, g, h, w,
@@ -60,15 +73,15 @@ function logic [255:0] sha256_op(input logic [31:0] a, b, c, d, e, f, g, h, w,
 begin
     S1 = rightrotate(e, 6) ^ rightrotate(e, 11) ^ rightrotate(e, 25);
     // Student to add remaning code below
-    ch = 
-    t1 = 
-    S0 = 
-    maj = 
-    t2 = 
+    // I found this on the powerpoint - ana
+    S0 = rightrotate(a, 2) ^ rightrotate(a, 13) ^ rightrotate(a, 22);
+    ch = (e & f) ^ ((~e) & g);
+    t1 = S1 + h + ch + k[t] + w;
+    maj = (a & b) ^ (a & c) ^ (b & c);
+    t2 = S0 + maj;
     sha256_op = {t1 + t2, a, b, c, d + t1, e, f, g};
 end
 endfunction
-
 
 // Generate request to memory
 // for reading from memory to get original message
@@ -77,7 +90,6 @@ assign mem_clk = clk;
 assign mem_addr = cur_addr + offset;
 assign mem_we = cur_we;
 assign mem_write_data = cur_write_data;
-
 
 // Right Rotation Example : right rotate input x by r
 // Lets say input x = 1111 ffff 2222 3333 4444 6666 7777 8888
@@ -91,10 +103,8 @@ assign mem_write_data = cur_write_data;
 function logic [31:0] rightrotate(input logic [31:0] x,
                                   input logic [ 7:0] r);
    // Student to add function implementation
-
-
+  rightrotate = (x >> r) | (x << (32-r));
 endfunction
-
 
 // SHA-256 FSM 
 // Get a BLOCK from the memory, COMPUTE Hash output using SHA256 function
@@ -109,69 +119,154 @@ begin
     // Initialize hash values h0 to h7 and a to h, other variables and memory we, address offset, etc
     IDLE: begin 
        if(start) begin
-       // Student to add rest of the code  
+        // Student to add rest of the code 
+        h0 <= 32'h6a09e667;
+        h1 <= 32'hbb67ae85;
+        h2 <= 32'h3c6ef372;
+        h3 <= 32'ha54ff53a;
+        h4 <= 32'h510e527f;
+        h5 <= 32'h9b05688c;
+        h6 <= 32'h1f83d9ab;
+        h7 <= 32'h5be0cd19;
 
+        a <= 32'h6a09e667;
+        b <= 32'hbb67ae85;
+        c <= 32'h3c6ef372;
+        d <= 32'ha54ff53a;
+        e <= 32'h510e527f;
+        f <= 32'h9b05688c;
+        g <= 32'h1f83d9ab;
+        h <= 32'h5be0cd19;
 
-
+        //initializing and setting to defaults - ana
+        j <= 8'b0;
+        i <= 8'b0;
+        offset <= 32'b0;
+        cur_we <= 0;
+        cur_addr <= message_addr;
+        cur_write_data <= 0;
+        state <= READ_FIRST;
 
        end
+    end
+
+    READ_FIRST: begin
+      state <= READ;
+    end
+
+    READ: begin
+      if(offset < NUM_OF_WORDS) begin
+        w[offset] <= mem_read_data;
+        offset <= offset + 1;
+        state <= READ_FIRST;
+      end
+
+      else begin
+        w[31] <= 32'd640;
+        w[20] <= 32'h80000000;
+
+        for(int x = 21; x < 31; x++) begin
+          w[x] <= 32'h0;
+        end
+
+        offset <= 0;
+        state <= BLOCK;
+      end
     end
 
     // SHA-256 FSM 
     // Get a BLOCK from the memory, COMPUTE Hash output using SHA256 function    
     // and write back hash value back to memory
     BLOCK: begin
-	// Fetch message in 512-bit block size
-	// For each of 512-bit block initiate hash value computation
-       
+	  // Fetch message in 512-bit block size
+	  // For each of 512-bit block initiate hash value computation
+      if(i < num_blocks) begin
+        // initializing at the start of processing wait lol nvm trying something- ana 
+        for(int x = 0; x < 16; x++) begin
+          w[x] <= w[x + (i*16)];
+          i <= i + 1;
+          state <= COMPUTE;
+        end
+      end
+      
+      else begin 
+        state <= WRITE_FIRST;
+      end
+    end
 
+    WRITE_FIRST: begin
+      cur_we <= 1;
+      cur_addr <= output_addr;
+      cur_write_data <= h0;
+      state <= WRITE;
 
-
-   
-
-
-
-
-    
-
+      holder[0] <= h0; 
+      holder[1] <= h1;
+      holder[2] <= h2;
+      holder[3] <= h3;
+      holder[4] <= h4;
+      holder[5] <= h5;
+      holder[6] <= h6;
+      holder[7] <= h7;
     end
 
     // For each block compute hash function
     // Go back to BLOCK stage after each block hash computation is completed and if
     // there are still number of message blocks available in memory otherwise
     // move to WRITE stage
-    COMPUTE: begin
-	// 64 processing rounds steps for 512-bit block 
-        if (i <= 64) begin
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     COMPUTE: begin
+      if (j < 64) begin
+      {a, b, c, d, e, f, g, h} <= sha256_op(a,b,c,d,e,f,g,h,w[0],j);
+        for(int n = 0; n < 15; n++) begin // given pdf pg 9 - ana
+          w[n] <= w[n+1];
         end
+
+        w[15] <= wt_new;
+        j <= j + 1;
+        state <= COMPUTE;	
+      end
+
+      else begin
+        state <= BLOCK;
+        j <= 0;
+      
+        h0 <= a + h0;
+        h1 <= b + h1;
+        h2 <= c + h2;
+        h3 <= d + h3;
+        h4 <= e + h4;
+        h5 <= f + h5;
+        h6 <= g + h6;
+        h7 <= h + h7;
+        
+        a <= a + h0;
+        b <= b + h1;
+        c <= c + h2;
+        d <= d + h3;
+        e <= e + h4;
+        f <= f + h5;
+        g <= g + h6;
+        h <= h + h7;
+      end
     end
 
     // h0 to h7 each are 32 bit hashes, which makes up total 256 bit value
     // h0 to h7 after compute stage has final computed hash value
     // write back these h0 to h7 to memory starting from output_addr
     WRITE: begin
-   
+      if(i < 8) begin
+        offset <= offset + 1;
+        cur_write_data <= holder[offset + 1];
+        state <= WRITE;
+      end
 
-
+      else begin
+        state <= IDLE;
+      end
     end
    endcase
   end
 
 // Generate done when SHA256 hash computation has finished and moved to IDLE state
 assign done = (state == IDLE);
-
 endmodule
