@@ -70,11 +70,11 @@ always_ff @(posedge clk, negedge reset_n)
       IDLE:	if(start) begin
         mem_we   <= 	1'b0; // as we did in sha256 exercise (when do we write to memory?)
         mem_addr <= 	cur_addr + offset; // as in sha256 -- set for reading message
-        t        <= 	 // initialize (starting out) ... 
-        state    <=      // next state in list
+        t        <= 	0; // initialize (starting out) ... 
+        state    <=   PREP11;   // next state in list
       end
       PREP11: begin
-        state    <= 
+        state    <=   PIPE12;
         mem_addr <= 	 // increment
       end
 	  PREP12: begin
@@ -86,7 +86,7 @@ always_ff @(posedge clk, negedge reset_n)
         mem_addr <= 
         state    <= 
         k1       <= 
-        t        <=     // increment
+        t        <=  t + 1   // increment
       end
       COMPUTE1: begin
         if (!(t[6] && t[0])) begin // t<65
@@ -117,7 +117,7 @@ always_ff @(posedge clk, negedge reset_n)
       COMPUTE2: begin
         if (!(t[6] && t[0])) begin // t<65
           if (t<2) 
-            mem_addr <= 
+          mem_addr <= 
           k1 <= 
           t <= 
         end 
