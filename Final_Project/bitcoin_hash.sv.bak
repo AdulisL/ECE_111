@@ -69,92 +69,92 @@ always_ff @(posedge clk, negedge reset_n)
     case(state)   // - Meron
       IDLE:	if(start) begin
         mem_we   <= 	1'b0; // as we did in sha256 exercise (when do we write to memory?)
-        mem_addr <= 	cur_addr + offset; // no cur_addr declared so I'm assuming we should replace this by something else - Maria; as in sha256 -- set for reading message
+        mem_addr <= 	cur_addr + offset; // as in sha256 -- set for reading message
         t        <= 	0; // initialize (starting out) ... 
-        state    <=  PREP11;   // next state in list
+        state    <=   PREP11;   // next state in list
       end
       PREP11: begin
-        state    <=   PREP12;  // Maria - go to next prep stage 
-        mem_addr <= mem_addr + 1; 	 // increment 
+        state    <=   PIPE12;
+        mem_addr <= 	 // increment
       end
 	  PREP12: begin
-        state    <= PREP13;
-        mem_addr <= mem_addr + 1; //  -Maria 
-        k1       <= k[t];  
+        state    <= 
+        mem_addr <= 
+        k1       <= 
       end
 	  PREP13: begin
-        mem_addr <= mem_addr + 1;
-        state    <= COMPUTE1;
-        k1       <= k[t+1]; // last prep before compute - Maria (I checked the notes on top of the file)
-        t        <=  t + 1;   //gets incremented during compute and in the prep preceding each compute- Maria
+        mem_addr <= 
+        state    <= 
+        k1       <= 
+        t        <=  t + 1   // increment
       end
-      COMPUTE1: begin // reads first 16 words
+      COMPUTE1: begin
         if (!(t[6] && t[0])) begin // t<65
           if (t<15) 
-            mem_addr <= mem_addr + 1; 
-          else   // 
-            mem_addr <= mem_addr + 16; // jump by 16 to new block 
-          k1 <= k1[t+1];
-          t  <= t + 1;
+            mem_addr <= 
+          else 
+            mem_addr <=   // jump by 16 to new block 
+          k1 <= 
+          t  <= 
         end 
         else begin
-          t        <= t + 1;
-          mem_addr <= mem_addr;  // 
-          state    <= PREP21;  //
+          t        <= 
+          mem_addr <= 
+          state    <= 
         end
       end
-      PREP21: begin // get ready to compute 2, waiting
-        state    <= PREP22; // maria 
-        mem_addr <= mem_addr +1; // maria
-        k1       <= k[t]; // next-to-last prep
+      PREP21: begin
+        state    <= 
+        mem_addr <= 
+        k1       <= 
       end
       PREP22: begin
-        mem_addr <= mem_addr + 1;
-        state    <= COMPUTE2;
-        k1       <= k[t+1];
-        t        <= t + 1; // if at prep stage preceding compute, increment t - Maria 
+        mem_addr <= 
+        state    <= 
+        k1       <= 
+        t        <= 
       end
-      COMPUTE2: begin  // last three words + padding (according to TA) - Maria
+      COMPUTE2: begin
         if (!(t[6] && t[0])) begin // t<65
           if (t<2) 
-          mem_addr <= mem_addr + 1;
-          k1 <= k[t+1];
-          t <= t +1;
+          mem_addr <= 
+          k1 <= 
+          t <= 
         end 
         else begin
-          t    <= t + 1;
-          state <= PREP31;
+          t     <= 
+          state <= 
         end
       end
       PREP31: begin
-        state <= PREP32;
-        k1    <= k[t];
+        state <= 
+        k1    <= 
       end
       PREP32: begin
-          state <= COMPUTE3;
-          k1    <= k[t+1];
-          t     <= t + 1;
+          state <= 
+          k1    <= 
+          t     <= 
       end
-	  COMPUTE3: begin   // 
+	  COMPUTE3: begin
         if (!(t[6] && t[0])) begin // t<65
-          k1 <= k[t+1];
-          t  <= t +1;
+          k1 <= 
+          t  <= 
         end 
         else begin
-          wc    <= 0;	// initialize
-          state <= WRITE;
+          wc    <= 		// initialize
+          state <= 
         end
       end
       WRITE: begin
-        if (wc < num_nonces) begin // iterates 16 times (number of nonces)
-          mem_we         <= 	1'b1;  // now enabled writing - Maria 
-          mem_addr       <= mem_addr + wc;// use wc as offset this time
-          mem_write_data <= mem_addr; // unsure - Maria
-          wc             <= wc + 1;// increment wc
+        if (wc < num_nonces) begin
+          mem_we         <= 
+          mem_addr       <=  // use wc as offset this time
+          mem_write_data <= 
+          wc             <=  // increment
         end 
         else begin
-          state <= IDLE;
-          done  <= 1;
+          state <= 
+          done  <= 
         end
       end
     endcase
