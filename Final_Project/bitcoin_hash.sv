@@ -50,7 +50,7 @@ genvar q;
 generate
   for (q=0; q<num_nonces; q++) begin : generate_pblocks
     pblock block(
-	  .clk       (clk),    // make the connections -- easy: match the port names
+	  .clk       (clk),    // make the connections - easy: match the port names
 	  .state     (state), 
 	  .t         (t), 
 	  .n         (q),      // picked it from office hours - Meron 
@@ -69,7 +69,7 @@ always_ff @(posedge clk, negedge reset_n)
     case(state)   // - Meron
       IDLE:	if(start) begin
         mem_we   <= 	1'b0; // as we did in sha256 exercise (when do we write to memory?)
-        mem_addr <= 	cur_addr + offset; // no cur_addr declared so I'm assuming we should replace this by something else - Maria; as in sha256 -- set for reading message
+        mem_addr <= 	message_addr; // refered to the tb - Meron; as in sha256 - set for reading message
         t        <= 	0; // initialize (starting out) ... 
         state    <=  PREP11;   // next state in list
       end
@@ -79,33 +79,33 @@ always_ff @(posedge clk, negedge reset_n)
       end
 	  PREP12: begin
         state    <= PREP13;
-        mem_addr <= mem_addr + 1; //  -Maria 
+        mem_addr <= mem_addr + 1; //  - Maria
         k1       <= k[t];  
       end
 	  PREP13: begin
         mem_addr <= mem_addr + 1;
         state    <= COMPUTE1;
         k1       <= k[t+1]; // last prep before compute - Maria (I checked the notes on top of the file)
-        t        <=  t + 1;   //gets incremented during compute and in the prep preceding each compute- Maria
+        t        <=  t + 1;   //gets incremented during compute and in the prep preceding each compute - Maria
       end
       COMPUTE1: begin // reads first 16 words
         if (!(t[6] && t[0])) begin // t<65
           if (t<15) 
             mem_addr <= mem_addr + 1; 
           else   // 
-            mem_addr <= mem_addr + 16; // jump by 16 to new block 
+            mem_addr <= message_addr + 16; // jump by 16 to new block 
           k1 <= k1[t+1];
           t  <= t + 1;
         end 
         else begin
-          t        <= t + 1;
-          mem_addr <= mem_addr;  // 
+          t        <= 0;
+          mem_addr <= mem_addr + 1;  // 
           state    <= PREP21;  //
         end
       end
       PREP21: begin // get ready to compute 2, waiting
         state    <= PREP22; // maria 
-        mem_addr <= mem_addr +1; // maria
+        mem_addr <= mem_addr + 1; // maria
         k1       <= k[t]; // next-to-last prep
       end
       PREP22: begin
@@ -119,10 +119,10 @@ always_ff @(posedge clk, negedge reset_n)
           if (t<2) 
           mem_addr <= mem_addr + 1;
           k1 <= k[t+1];
-          t <= t +1;
+          t <= t + 1;
         end 
         else begin
-          t    <= t + 1;
+          t    <= 0;
           state <= PREP31;
         end
       end
@@ -138,7 +138,7 @@ always_ff @(posedge clk, negedge reset_n)
 	  COMPUTE3: begin   // 
         if (!(t[6] && t[0])) begin // t<65
           k1 <= k[t+1];
-          t  <= t +1;
+          t  <= t + 1;
         end 
         else begin
           wc    <= 0;	// initialize
@@ -147,9 +147,9 @@ always_ff @(posedge clk, negedge reset_n)
       end
       WRITE: begin
         if (wc < num_nonces) begin // iterates 16 times (number of nonces)
-          mem_we         <= 	1'b1;  // now enabled writing - Maria 
-          mem_addr       <= mem_addr + wc;// use wc as offset this time
-          mem_write_data <= mem_addr; // unsure - Maria
+          mem_we         <= 1'b1;  // now enabled writing - Maria 
+          mem_addr       <= output_addr + wc;// use wc as offset this time
+          mem_write_data <= hout[wc] ; // outputing the hashed value - Meron
           wc             <= wc + 1;// increment wc
         end 
         else begin

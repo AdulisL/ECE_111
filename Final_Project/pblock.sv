@@ -76,13 +76,13 @@ always_ff @(posedge clk)
 // W ARRAY
 always_ff @(posedge clk) begin
   for (int m = 0; m < 15; m++) w[m] <= w[m+1];
-  wt <= w[1]  + (rightrotate(w[2],   7) ^ rightrotate(w[2],  18) ^ (w[2] >> 3)) +
-        w[10] + (rightrotate(w[15], 17) ^ rightrotate(w[15], 19) ^ (w[15]>>10));
+  wt <= w[1] + (rightrotate(w[2],   7) ^ rightrotate(w[2], 18) ^ (w[2] >> 3)) + w[10] + (rightrotate(w[15], 17) ^ rightrotate(w[15], 19) ^ (w[15]>>10));
   if (state[4]) begin // COMPUTE1, COMPUTE2, COMPUTE3
     if (t<15) begin
       case (state[1:0])
-        0: // COMPUTE1
-			  w[15] <= 	mem_read_data;			// hint: comes from memory - Meron
+        0: begin// COMPUTE1
+			      w[15] <= 	mem_read_data;			// hint: comes from memory - Meron
+        end
         1: begin // COMPUTE2	w[15] <= ...
            if (t<2)
 			        w[15] <= 	mem_read_data;    // hint: comes from memory - Meron
@@ -102,20 +102,21 @@ always_ff @(posedge clk) begin
         end
       endcase
     end 
-	else 	begin // if t>14
+	else 	 // if t>14
        w[15] <=  wt;
-    if (!state[1])                        // not COMPUTE3
+  if (!state[1]) begin                       // not COMPUTE3
       //   h2[i] <= h1[i];  // second pass - Meron
         {h2[0], h2[1], h2[2], h2[3], h2[4], h2[5], h2[6], h2[7]} <= {h1[0], h1[1], h1[2], h1[3], h1[4], h1[5], h1[6], h1[7]};
          
   end  
   else if (state[4:1]==4'b0101) begin  // PREP31, PREP32
     w[15] <=   			h2[0];        // as above in t<7 case - Meron
-    for (int m = 0; m < 7; m++)        // as above 
-      h2[m] <= h2[m+1];           // pushing down - Meron
+    for (int m = 0; m < 7; m++)  h2[m] <= h2[m+1];  // as above - Meron
+                 
   end 
   else 
    	w[15] <=  mem_read_data; // fetch more data - Meron
+  end
 end
 
 // H ARRAY
@@ -133,8 +134,10 @@ always_ff @(posedge clk) begin
       h[6] <= 32'h1f83d9ab;
       h[7] <= 32'h5be0cd19;
     end 
-    else if (state[2:0] == 3'b000)  // Second fill - Meron
+    else if (state[2:0] == 3'b000) begin // Second fill - Meron
 	    {h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7]} <= {h1[0], h1[1], h1[2], h1[3], h1[4], h1[5], h1[6], h1[7]};
+    end
   end
 end
+
 endmodule
